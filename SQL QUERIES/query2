@@ -1,0 +1,19 @@
+-- Approach
+-- 1.Assign row_num on basis of grouping 
+-- 2. earliest date will have one 
+-- 3. Put step 2 into cte 
+-- 4. filter data where row_number = 1 and Line_of_business = Hotel 
+
+WITH user_bookings as (
+SELECT 
+	 user_id
+	 , Booking_date
+	, ROW_NUMBER() OVER(partition BY user_id ORDER BY  Booking_date ) as rn
+	, Line_of_business
+
+FROM public.booking_table
+	)
+	
+	Select user_id as first_booking_hotel_users
+	FROM user_bookings
+	WHERE rn = 1 AND line_of_business='Hotel'

@@ -1,0 +1,23 @@
+-- QUESTION CALCULATE percebtage of hotel and flights bookings segregated by month
+-- Approach
+-- 1. FIND total COUNT OF bookings per month 
+-- 2. find count of hotel bookings per month
+-- 3. find count of Flights bookings per month
+-- 4. Put above steps into cte 
+-- 5. Calculate Percentage 
+with required_table as (
+SELECT 
+	TO_CHAR(Booking_date, 'month') AS month_name
+	, COUNT(booking_id) as total_bookings 
+	, COUNT(booking_id) FILTER (WHERE Line_of_business='Flight' ) as flight_bookings 
+	, COUNT(booking_id) FILTER (WHERE Line_of_business='Hotel' ) as hotel_bookings 
+
+FROM public.booking_table
+GROUP BY  TO_CHAR(Booking_date, 'month')
+		)
+
+Select 
+	month_name 
+  ,ROUND((flight_bookings*100.0/total_bookings),2) as  flight_percentage
+  , ROUND((hotel_bookings*100.0/total_bookings),2) as  hotel_percentage
+FROM required_table

@@ -1,0 +1,45 @@
+
+
+--Approach
+-- 1. Join the table by user_id 
+-- 2. Using user Table find count of users per segment (cte)
+-- 3. Count Distinct user_id who have taken flight in APril and group by segment 
+-- 4. Join Part 2 and 3 
+
+-- cte 1
+with total_user_by_segment as (
+SELECT 
+		Segment
+        ,COUNT(User_id) as total_user_count	 
+FROM user_table 
+group by Segment
+) ,
+
+-- cte2
+Apr_user_count_by_segment as (
+
+SELECT * FROM booking_table where EXTRACT(month from Booking_date) = 4 AND Line_of_business ='Flight' 
+	),
+	
+-- 	cte3 
+distinct_user_count_Apr as (
+	
+	SELECT 
+		segment 
+	 ,COUNT(Distinct c.user_id) as users_who_booked_flight_in_apr2022
+	FROM Apr_user_count_by_segment c 
+	JOIN user_table u ON
+		c.user_id = u.user_id
+	GROUP BY Segment	
+	) 
+	
+-- 	FINAL QUERY 
+	SELECT 
+		cc.Segment
+		, cc.total_user_count
+		, oo.users_who_booked_flight_in_apr2022
+	
+	FROM total_user_by_segment cc
+	JOIN distinct_user_count_Apr oo ON 
+		cc.Segment = oo.Segment
+	

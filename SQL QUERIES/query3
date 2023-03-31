@@ -1,0 +1,19 @@
+-- Approach
+-- per user find the min and max 
+-- subtract the last and first day to find num of days 
+with formatted_table as (
+SELECT 
+	  user_id
+	, MIN(booking_date)  as first_booking_date
+	,MAX(booking_date) as last_booking_date
+
+FROM  public.booking_table
+GROUP BY user_id
+	)
+	
+SELECT 
+	  user_id
+  	, (last_booking_date - first_booking_date) as date_difference
+
+FROM formatted_table
+order by user_id

@@ -1,0 +1,14 @@
+-- Approach
+-- use count function for bookings count 
+-- use filter keyword to filter out flights and hotels bookings 
+
+SELECT 
+
+	user_id
+  , COUNT(booking_id) FILTER( where Line_of_business='Flight') as no_of_flights_booking 
+  , COUNT(booking_id) FILTER( where Line_of_business='Hotel') as no_of_hotels_booking 
+  , EXTRACT(year from Booking_date) as Year_2022
+
+FROM public.booking_table
+group by user_id,  EXTRACT(year from Booking_date)
+ORDER BY user_id
