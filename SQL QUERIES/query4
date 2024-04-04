@@ -12,3 +12,14 @@ SELECT
 FROM public.booking_table
 group by user_id,  EXTRACT(year from Booking_date)
 ORDER BY user_id
+
+
+
+
+ Above query is not based on segemnt wise here is right query for Q4
+
+SELECT U. Segment,
+ SUM(CASE WHEN b. Line_of_business= 'Flight' THEN 1 ELSE 0 END) AS Flight ,
+SUM(CASE WHEN b. Line_of_business= 'HOTEL' THEN 1 ELSE 0 END) AS HOTEL ,
+EXTRACT(YEAR FROM Booking_date) AS Year_2022
+   FROM BOOKINGS B INNER JOIN USERS U ON B.User_id= U. User_id  GROUP BY U. Segment,EXTRACT(YEAR FROM Booking_date);
